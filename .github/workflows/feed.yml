@@ -2,8 +2,8 @@ name: Actualizar feed del perfil
 
 on:
   schedule:
-    # Todos los días a las 04:23 UTC
-    - cron: "23 4 * * *"
+    # Cada 6 horas (00:23, 06:23, 12:23 y 18:23 UTC)
+    - cron: "23 */6 * * *"
   workflow_dispatch:
   push:
     branches: ["main"]
@@ -37,18 +37,12 @@ jobs:
               .replace(/([\\`*_{}\[\]()#!|<>])/g, '\\$1')
               .trim();
 
-            const relative = (iso) => {
-              const diff = Date.now() - new Date(iso).getTime();
-              const minutes = Math.max(1, Math.floor(diff / 60000));
-              if (minutes < 60) return `hace ${minutes} min`;
-              const hours = Math.floor(minutes / 60);
-              if (hours < 24) return `hace ${hours} h`;
-              const days = Math.floor(hours / 24);
-              if (days === 1) return 'ayer';
-              if (days < 30) return `hace ${days} días`;
-              const months = Math.floor(days / 30);
-              return months === 1 ? 'hace 1 mes' : `hace ${months} meses`;
-            };
+            // Fecha corta y estable, por ejemplo "7 nov".
+            const shortDate = (iso) => new Intl.DateTimeFormat('es', {
+              day: 'numeric',
+              month: 'short',
+              timeZone: 'UTC',
+            }).format(new Date(iso));
 
             // Actividad pública de los últimos 90 días.
             const cutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
@@ -91,7 +85,7 @@ jobs:
                 continue;
               }
 
-              lines.push(`- ${text} · <sub>${relative(event.created_at)}</sub>`);
+              lines.push(`- ${text} · <sub>${shortDate(event.created_at)}</sub>`);
               if (lines.length >= 6) break;
             }
 
