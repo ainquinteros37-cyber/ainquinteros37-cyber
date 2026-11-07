@@ -1,0 +1,148 @@
+name: Actualizar feed del perfil
+
+on:
+  schedule:
+    # Todos los días a las 04:23 UTC
+    - cron: "23 4 * * *"
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: perfil-feed
+  cancel-in-progress: true
+
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Generar feed y vitrina
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const readmePath = 'README.md';
+            const login = context.repo.owner;
+            const profileRepo = context.repo.repo;
+
+            // Limpia texto para que se vea bien en Markdown.
+            const esc = (value) => String(value ?? '')
+              .replace(/\r?\n/g, ' ')
+              .replace(/([\\`*_{}\[\]()#!|<>])/g, '\\$1')
+              .trim();
+
+            const relative = (iso) => {
+              const diff = Date.now() - new Date(iso).getTime();
+              const minutes = Math.max(1, Math.floor(diff / 60000));
+              if (minutes < 60) return `hace ${minutes} min`;
+              const hours = Math.floor(minutes / 60);
+              if (hours < 24) return `hace ${hours} h`;
+              const days = Math.floor(hours / 24);
+              if (days === 1) return 'ayer';
+              if (days < 30) return `hace ${days} días`;
+              const months = Math.floor(days / 30);
+              return months === 1 ? 'hace 1 mes' : `hace ${months} meses`;
+            };
+
+            // Actividad pública de los últimos 90 días.
+            const cutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
+            const events = await github.paginate(
+              github.rest.activity.listPublicEventsForUser,
+              { username: login, per_page: 30 }
+            );
+
+            const lines = [];
+            const seen = new Set();
+
+            for (const event of events) {
+              if (new Date(event.created_at).getTime() < cutoff) continue;
+              if (!event.repo || event.repo.name === `${login}/${profileRepo}`) continue;
+
+              // Una entrada por tipo y repositorio: el feed queda limpio.
+              const key = `${event.repo.name}:${event.type}`;
+              if (seen.has(key)) continue;
+              seen.add(key);
+
+              const repo = event.repo.name.split('/')[1] ?? event.repo.name;
+              const url = `https://github.com/${event.repo.name}`;
+              let text = '';
+
+              if (event.type === 'PushEvent') {
+                const commits = event.payload?.size ?? event.payload?.commits?.length ?? 0;
+                const label = commits === 1 ? '1 commit' : `${commits} commits`;
+                text = `📦 push en [${esc(repo)}](${url}) · ${label}`;
+              } else if (event.type === 'CreateEvent' && event.payload?.ref_type === 'repository') {
+                text = `✨ nuevo proyecto: [${esc(repo)}](${url})`;
+              } else if (event.type === 'ReleaseEvent') {
+                text = `🏷️ release en [${esc(repo)}](${url})`;
+              } else if (event.type === 'PullRequestEvent') {
+                text = `🔀 pull request en [${esc(repo)}](${url})`;
+              } else if (event.type === 'IssuesEvent') {
+                text = `📝 issue en [${esc(repo)}](${url})`;
+              } else if (event.type === 'ForkEvent') {
+                text = `🍴 fork de [${esc(repo)}](${url})`;
+              } else {
+                continue;
+              }
+
+              lines.push(`- ${text} · <sub>${relative(event.created_at)}</sub>`);
+              if (lines.length >= 6) break;
+            }
+
+            const feed = lines.length
+              ? lines.join('\n')
+              : '_Todavía no hay actividad pública. En cuanto suba algo, aparecerá aquí solo._';
+
+            // Solo repositorios públicos, propios y que no sean forks.
+            const repos = await github.paginate(
+              github.rest.repos.listForUser,
+              { username: login, type: 'owner', sort: 'pushed', per_page: 100 }
+            );
+
+            const showcase = repos
+              .filter((repo) => !repo.private && !repo.fork && repo.name !== profileRepo)
+              .slice(0, 4)
+              .map((repo) => {
+                const description = repo.description ? ` — ${esc(repo.description)}` : '';
+                const language = repo.language ? ` · \`${esc(repo.language)}\`` : '';
+                return `- **[${esc(repo.name)}](${repo.html_url})**${description}${language}`;
+              });
+
+            const vitrina = showcase.length
+              ? showcase.join('\n')
+              : '_Pronto voy a dejar por acá mis proyectos pequeños._';
+
+            let readme = fs.readFileSync(readmePath, 'utf8');
+
+            const replaceSection = (start, end, body) => {
+              const from = readme.indexOf(start);
+              const to = readme.indexOf(end);
+              if (from === -1 || to === -1 || to < from) {
+                throw new Error(`No encontré la sección ${start} en README.md`);
+              }
+              readme = readme.slice(0, from + start.length) + '\n' + body + '\n' + readme.slice(to);
+            };
+
+            replaceSection('<!-- FEED:START -->', '<!-- FEED:END -->', feed);
+            replaceSection('<!-- VITRINA:START -->', '<!-- VITRINA:END -->', vitrina);
+
+            fs.writeFileSync(readmePath, readme);
+            core.info(`Feed generado con ${lines.length} estado(s) y ${showcase.length} proyecto(s).`);
+
+      - name: Guardar cambios
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "Sin cambios para guardar."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "chore: actualizar feed automático"
+          git push

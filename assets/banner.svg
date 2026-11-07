@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="titulo descripcion">
+  <title id="titulo">Ainnn — gamer, tech y vibe coding</title>
+  <desc id="descripcion">Banner con estética gamer en rosa, violeta y cian.</desc>
+
+  <defs>
+    <linearGradient id="fondo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0D0B1F"/>
+      <stop offset="0.55" stop-color="#1A1030"/>
+      <stop offset="1" stop-color="#2B1147"/>
+    </linearGradient>
+    <linearGradient id="nombre" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFB3DD"/>
+      <stop offset="0.5" stop-color="#FF6FB5"/>
+      <stop offset="1" stop-color="#9D4EDD"/>
+    </linearGradient>
+    <pattern id="cuadricula" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#9D4EDD" stroke-opacity="0.12" stroke-width="1"/>
+    </pattern>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="desenfoque"/>
+      <feMerge>
+        <feMergeNode in="desenfoque"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="320" rx="28" fill="url(#fondo)"/>
+  <rect width="1200" height="320" rx="28" fill="url(#cuadricula)"/>
+  <rect x="1.5" y="1.5" width="1197" height="317" rx="26.5" fill="none" stroke="#FF6FB5" stroke-opacity="0.28" stroke-width="3"/>
+
+  <g fill="#FF6FB5">
+    <circle cx="176" cy="64" r="3" opacity="0.8"/>
+    <circle cx="238" cy="98" r="2" opacity="0.6"/>
+    <circle cx="932" cy="66" r="3" opacity="0.8"/>
+    <circle cx="1040" cy="112" r="2" opacity="0.6"/>
+    <circle cx="860" cy="248" r="2.5" opacity="0.5"/>
+    <circle cx="306" cy="236" r="2" opacity="0.5"/>
+  </g>
+  <g fill="#00E5FF">
+    <circle cx="134" cy="222" r="2.5" opacity="0.7"/>
+    <circle cx="994" cy="210" r="2" opacity="0.6"/>
+    <circle cx="790" cy="70" r="2" opacity="0.5"/>
+    <circle cx="406" cy="84" r="2" opacity="0.5"/>
+  </g>
+
+  <g transform="translate(72 118)" opacity="0.95">
+    <rect x="0" y="0" width="156" height="84" rx="42" fill="#120C24" stroke="#FF6FB5" stroke-width="3"/>
+    <rect x="30" y="26" width="10" height="32" rx="3" fill="#FF9BD2"/>
+    <rect x="19" y="37" width="32" height="10" rx="3" fill="#FF9BD2"/>
+    <circle cx="116" cy="34" r="9" fill="#00E5FF"/>
+    <circle cx="136" cy="50" r="9" fill="#9D4EDD"/>
+    <rect x="62" y="46" width="30" height="5" rx="2.5" fill="#3B2A5E"/>
+  </g>
+
+  <g transform="translate(1006 132)" fill="#FF6FB5" filter="url(#brillo)">
+    <rect x="18" y="0" width="12" height="12"/>
+    <rect x="36" y="0" width="12" height="12"/>
+    <rect x="6" y="12" width="54" height="12"/>
+    <rect x="12" y="24" width="42" height="12"/>
+    <rect x="18" y="36" width="30" height="12"/>
+    <rect x="24" y="48" width="18" height="12"/>
+  </g>
+
+  <text x="600" y="152" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="94" font-weight="800" fill="url(#nombre)" filter="url(#brillo)">Ainnn</text>
+  <text x="600" y="202" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="600" letter-spacing="6" fill="#C9C2E6">GAMER · TECH · VIBE CODING</text>
+  <text x="600" y="252" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" letter-spacing="2" fill="#8E86B8">aprendiendo a mi ritmo, creando cosas simples y bonitas</text>
+</svg>
