@@ -16,7 +16,7 @@ Gamer y curiosa de la tecnología. Me gusta **armar cositas para mi PC**, person
 
 - 🎮 **Jugando:** Valorant, Minecraft y algún indie que me atrape.
 - 🛠️ **Cacharreando:** scripts para Windows, pequeñas apps y automatizaciones.
-- 🌱 **Aprendiendo:** C#, PowerShell y un poquito de desarrollo web.
+- 🌱 **Aprendiendo:** C#, PowerShell y todo lo que me sirva para el próximo proyecto.
 - 💜 **Filosofía:** *si funciona y se ve bonito, ya es un buen proyecto.*
 
 ## 🌙 Últimos estados
@@ -43,13 +43,6 @@ _Pronto voy a dejar por acá mis proyectos pequeños._
 <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
 <img src="https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white" alt="VS Code" />
 <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" />
-<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
-<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
-
-<br />
-
-<img src="https://img.shields.io/badge/aprendiendo-JavaScript-F7DF1E?style=flat-square&labelColor=1A1030&logo=javascript&logoColor=F7DF1E" alt="Aprendiendo JavaScript" />
-<img src="https://img.shields.io/badge/aprendiendo-Python-3776AB?style=flat-square&labelColor=1A1030&logo=python&logoColor=white" alt="Aprendiendo Python" />
 
 </div>
 
