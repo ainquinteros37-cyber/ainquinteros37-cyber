@@ -85,4 +85,10 @@ Cuando no estoy programando, probablemente estoy personalizando mi setup, proban
 
 <div align="center">
   <sub>Hecho con 💜, café y una que otra partida de Valorant.</sub>
+
+  <br /><br />
+
+  <a href="https://github.com/ainquinteros37-cyber/ainquinteros37-cyber/actions/workflows/feed.yml">
+    <img src="https://github.com/ainquinteros37-cyber/ainquinteros37-cyber/actions/workflows/feed.yml/badge.svg" alt="Feed automático activo" />
+  </a>
 </div>
